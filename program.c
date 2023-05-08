@@ -41,7 +41,7 @@ void inicioLista(Aluno **lista, int turma, char nome[], float nota) {
   *lista = primeiro;
 }
 
-// TODO: Insere Aluno ao final da lista
+// Insere Aluno ao final da lista
 void finalLista(Aluno **lista, int turma, char nome[], float nota) {
 
   Aluno *ultimo = (Aluno *)malloc(sizeof(Aluno));
@@ -67,15 +67,51 @@ void finalLista(Aluno **lista, int turma, char nome[], float nota) {
   }
 }
 
-// TODO: Exclui Aluno do meio da lista
+// Exclui Aluno do meio da lista
+void excluiDaLista(Aluno **lista, int i) {
+  if (*lista == NULL)
+    return;
+
+  if (i <= 0)
+    return;
+
+  // Define o nodo da lista a ser excluído;
+  Aluno *tmp = *lista;
+  int j = 1;
+  while (tmp != NULL && j < i) {
+    tmp = tmp->prx;
+    j++;
+  }
+
+  // Se o índice de exclusão não for o primeiro da lista,
+  if (tmp->ant != NULL)
+    // Altera o próximo do item anterior para o próximo do que será excluído
+    tmp->ant->prx = tmp->prx;
+  // Mas se for o primeiro,
+  else
+    // Define como primeiro da lista o próximo
+    *lista = tmp->prx;
+
+  if (tmp->prx != NULL)
+    tmp->prx->ant = tmp->ant;
+
+  free(tmp);
+}
+
 // TODO: Imprime a lista de Alunos
 // TODO: Método Main(), para implementar o `Roteiro de teste`
 int main() {
   Aluno *lista = initList();
 
-  inicioLista(&lista, 1, "Fabio", 9.0);
-  inicioLista(&lista, 1, "Pedro", 8.0);
+  finalLista(&lista, 1, "Fabio", 7.0);
+  finalLista(&lista, 1, "João", 8.0);
+  finalLista(&lista, 1, "Ronaldo", 6.0);
+  finalLista(&lista, 1, "Pedro", 8.0);
+  finalLista(&lista, 1, "Maria", 10.0);
+  finalLista(&lista, 1, "Felipe", 9.0);
   finalLista(&lista, 2, "Alice", 10.0);
+  excluiDaLista(&lista, 3);
+  excluiDaLista(&lista, 1);
 
   Aluno *tmp = lista;
   while (tmp != NULL) {
@@ -83,6 +119,8 @@ int main() {
            tmp->nota);
     tmp = tmp->prx;
   }
+
+  free(lista);
 
   return 1;
 }
