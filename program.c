@@ -67,6 +67,54 @@ void finalLista(Aluno **lista, int turma, char nome[], float nota) {
   }
 }
 
+void insereNaLista(Aluno **lista, int i, int turma, char nome[], float nota) {
+  if (*lista == NULL) {
+    return;
+  }
+
+  if (i <= 1) {
+    return;
+  }
+
+  Aluno *aluno = (Aluno *)malloc(sizeof(Aluno));
+
+  aluno->turma = turma;
+  strcpy(aluno->nome, nome);
+  aluno->nota = nota;
+
+  aluno->ant = NULL;
+  aluno->prx = NULL;
+
+  if (i == 2) {
+    aluno->prx = (*lista)->prx;
+    if ((*lista)->prx != NULL) {
+      (*lista)->prx->ant = aluno;
+    }
+    (*lista)->prx = aluno;
+    aluno->ant = (*lista);
+  } else {
+    Aluno *tmp = *lista;
+
+    int j = 1;
+    while (tmp != NULL && j < i-1 ) {
+      tmp = tmp->prx;
+      j++;
+    }
+
+    if (tmp == NULL) {
+      free(aluno);
+      return;
+    }
+
+    aluno->ant = tmp;
+    aluno->prx = tmp->prx;
+    if (tmp->prx != NULL) {
+      tmp->prx->ant = aluno;
+    }
+    tmp->prx = aluno;
+  }
+}
+
 // Exclui Aluno do meio da lista
 void excluiDaLista(Aluno **lista, int i) {
   if (*lista == NULL)
@@ -92,38 +140,37 @@ void excluiDaLista(Aluno **lista, int i) {
     // Define como primeiro da lista o próximo
     *lista = tmp->prx;
 
-  if (tmp->prx != NULL)
+  if (tmp->prx != NULL) {
     tmp->prx->ant = tmp->ant;
-
-  free(tmp);
+  }
 }
 
 // Imprime a lista de Alunos
-void imprimeLista(Aluno *lista) {
-  Aluno *tmp = lista;
+void imprimeLista(Aluno **lista) {
+  printf("\nInício da lista\n");
+  Aluno *tmp = *lista;
   while (tmp != NULL) {
-    printf("Nome: %s, Turma: %d, Nota: %.2f\n", tmp->nome, tmp->turma,
-           tmp->nota);
+    printf("Nome: %s, Nota: %.2f, Turma: %d\n", tmp->nome, tmp->nota,
+           tmp->turma);
     tmp = tmp->prx;
   }
+  printf("\nFim da lista\n");
 }
+
 // TODO: Método Main(), para implementar o `Roteiro de teste`
 int main() {
   Aluno *lista = initList();
 
-  finalLista(&lista, 1, "Fabio", 7.0);
-  finalLista(&lista, 1, "João", 8.0);
-  finalLista(&lista, 1, "Ronaldo", 6.0);
-  finalLista(&lista, 1, "Pedro", 8.0);
-  finalLista(&lista, 1, "Maria", 10.0);
-  finalLista(&lista, 1, "Felipe", 9.0);
-  finalLista(&lista, 2, "Alice", 10.0);
+  inicioLista(&lista, 1, "João", 7.0);
+  finalLista(&lista, 1, "Maria", 8.0);
+  finalLista(&lista, 1, "Paula", 6.0);
+  insereNaLista(&lista, 3, 1, "Carlos", 8.0);
+
+  imprimeLista(&lista);
+
+  excluiDaLista(&lista, 2);
   excluiDaLista(&lista, 3);
-  excluiDaLista(&lista, 1);
 
-  imprimeLista(lista);
-
-  free(lista);
-
+  imprimeLista(&lista);
   return 1;
 }
