@@ -147,7 +147,7 @@ void excluiDaLista(Aluno **lista, int i) {
 
 // Imprime a lista de Alunos
 void imprimeLista(Aluno **lista) {
-  printf("\nInício da lista\n");
+  printf("\nInício da lista\n\n");
   Aluno *tmp = *lista;
   while (tmp != NULL) {
     printf("Nome: %s, Nota: %.2f, Turma: %d\n", tmp->nome, tmp->nota,
@@ -157,7 +157,7 @@ void imprimeLista(Aluno **lista) {
   printf("\nFim da lista\n");
 }
 
-// TODO: Método Main(), para implementar o `Roteiro de teste`
+// Método Main(), para implementar o `Roteiro de teste`
 int main() {
   Aluno *lista = initList();
 
